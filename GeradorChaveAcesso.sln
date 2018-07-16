@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeradorChaveAcesso.Dominio"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeradorChaveAcesso.Dominio.Tests", "GeradorChaveAcesso.Dominio.Tests\GeradorChaveAcesso.Dominio.Tests.csproj", "{BB4C0034-FF7C-4245-98A7-83C5825C4FA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSite", "WebSite\WebSite.csproj", "{13553A69-DC5C-48B9-A253-F89A89EA2F33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSiteReact", "WebSiteReact\WebSiteReact.csproj", "{13553A69-DC5C-48B9-A253-F89A89EA2F33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
