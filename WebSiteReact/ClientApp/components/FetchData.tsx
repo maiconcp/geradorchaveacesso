@@ -12,6 +12,7 @@ type WeatherForecastProps =
 
 class FetchData extends React.Component<WeatherForecastProps, {}> {
     componentWillMount() {
+        console.log("componentWillMount FetchData");
         // This method runs when the component is first added to the page
         let startDateIndex = parseInt(this.props.match.params.startDateIndex) || 0;
         this.props.requestWeatherForecasts(startDateIndex);
