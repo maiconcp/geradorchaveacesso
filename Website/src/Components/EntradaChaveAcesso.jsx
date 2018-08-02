@@ -1,9 +1,11 @@
 'use strict'
 
 import React from 'react'
-import { Glyphicon, ButtonToolbar, ButtonGroup, Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
+import { Form, FormFeedback, ButtonToolbar, ButtonGroup, Button, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import {Icon} from 'react-fa'
 import Lista from './Lista'
 import Api from '../api.config'
+import styles from './EntradaChaveAcesso.css';
 
 class EntradaChaveAcesso extends React.Component {
   constructor(props) {
@@ -12,10 +14,11 @@ class EntradaChaveAcesso extends React.Component {
     this.handleValidarClick = this.handleValidarClick.bind(this)
     this.handleChaveChange = this.handleChaveChange.bind(this)
 
-    this.state = {value: '', 
-                    validationState: null,
-                    erros: [],
-                    decomposicao: null};    
+    this.state = {chave: '', 
+                  chaveValida: false,
+                  notification: [],
+                  decomposicao: null};    
+
   }
 
   validarChave(chave)
@@ -28,16 +31,16 @@ class EntradaChaveAcesso extends React.Component {
     })
     .then(data => {
       if (data.isValid) {
-        this.setState({value: chave, 
-          validationState: 'success', 
-          erros: [],
+        this.setState({chave: chave, 
+          chaveValida: true, 
+          notification: ['A chave informada é Válida'],
           decomposicao: data}); 
       }
       else {
         
-        this.setState({value: chave, 
-          validationState: 'error', 
-          erros: data.erros,
+        this.setState({chave: chave, 
+          chaveValida: false, 
+          notification: data.erros,
           decomposicao: data}); 
       }
     })   
@@ -56,14 +59,14 @@ class EntradaChaveAcesso extends React.Component {
     if (length == 44) 
       this.validarChave(currentValue);
     else if (length > 0) 
-      this.setState({value: currentValue, 
-                     validationState: 'warning', 
-                     erros: ['A chave deve conter 44 dígitos'],
+      this.setState({chave: currentValue, 
+                     chaveValida: false, 
+                     notification: ['A chave deve conter 44 dígitos'],
                      decomposicao: null});    
     else
-      this.setState({value: currentValue, 
-                     validationState: null,
-                     erros: [],
+      this.setState({chave: currentValue, 
+                     chaveValida: false,
+                     notification: [],
                      decomposicao: null});
   }
 
@@ -75,27 +78,38 @@ class EntradaChaveAcesso extends React.Component {
     
   render() {
     return (
-    <form className="card">
-      <FormGroup controlId="formBasicText"
-                 validationState={this.state.validationState}>
-        <ControlLabel>Chave de Acesso</ControlLabel>
-        <FormControl type="number"
-                     value={this.state.value}
-                     onChange={this.handleChaveChange}/>
-        <FormControl.Feedback />
-        <HelpBlock>
-          <Lista itens={this.state.erros} />
-        </HelpBlock>
+    <Form className="card">
+      <FormGroup>
+        <Label for="inputChaveAcesso">Chave de Acesso:</Label>
+        <InputGroup>
+          <Input type="number" 
+                  name="inputChaveAcesso" 
+                  id="inputChaveAcesso"
+                  value={this.state.chave}
+                  onChange={this.handleChaveChange}
+                  invalid={!this.state.chaveValida && this.state.chave.length > 0}
+                  valid={this.state.chaveValida }
+                  />
+          {
+            !this.state.chaveValida && this.state.chave.length > 0 &&
+              <InputGroupAddon addonType="append" className="icon-addon"><Icon name="close" className={styles.iconwarning}/></InputGroupAddon>
+          }
+          {
+            this.state.chaveValida &&
+            <InputGroupAddon addonType="append" className="icon-addon"><Icon name="check" className={styles.iconsuccess}/></InputGroupAddon>
+          }                
+          <FormFeedback valid={this.state.chaveValida}><Lista itens={this.state.notification}/></FormFeedback>
+        </InputGroup>
       </FormGroup>
       <div className="form-group col-md-12">
             <ButtonToolbar>
                 <ButtonGroup>
-                    <Button bsStyle="primary" onClick={this.handleValidarClick}><Glyphicon glyph="ok" />&nbsp;Validar</Button>
-                    <Button bsStyle="success"><Glyphicon glyph="search"/>&nbsp;Decodificar</Button>
+                    <Button color="primary" onClick={this.handleValidarClick}><Icon name="check"/>&nbsp;Validar</Button>
+                    <Button color="success"><Icon name="search"/>&nbsp;Decodificar</Button>
                 </ButtonGroup>
             </ButtonToolbar>
         </div>    
-    </form>
+    </Form>
   )}
 }
 

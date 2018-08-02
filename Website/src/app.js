@@ -7,13 +7,9 @@ import EntradaChaveAcesso from './Components/EntradaChaveAcesso.jsx';
 
 class App extends React.Component {
   render() {
-    return <div>
-      <h1>Aplicação 2</h1>
-      <div>
+    return <div><br/>
         <EntradaChaveAcesso/>
-        <Title value="maicon"/>
       </div>
-    </div>
   }
 }
 
