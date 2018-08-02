@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { Glyphicon, ButtonToolbar, ButtonGroup, Button, FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
+import Lista from './Lista'
 import Api from '../api.config'
 
 class EntradaChaveAcesso extends React.Component {
@@ -9,12 +10,12 @@ class EntradaChaveAcesso extends React.Component {
     super(props);
 
     this.handleValidarClick = this.handleValidarClick.bind(this)
-    this.handleChaveChange = this.handleChaveChange.bind(this);
-    
-    this.setState({value: currentValue, 
+    this.handleChaveChange = this.handleChaveChange.bind(this)
+
+    this.state = {value: '', 
                     validationState: null,
-                    help: '',
-                    decomposicao: null});    
+                    erros: [],
+                    decomposicao: null};    
   }
 
   validarChave(chave)
@@ -29,13 +30,14 @@ class EntradaChaveAcesso extends React.Component {
       if (data.isValid) {
         this.setState({value: chave, 
           validationState: 'success', 
-          help: '',
+          erros: [],
           decomposicao: data}); 
       }
       else {
+        
         this.setState({value: chave, 
           validationState: 'error', 
-          help: data.erros[0],
+          erros: data.erros,
           decomposicao: data}); 
       }
     })   
@@ -55,15 +57,14 @@ class EntradaChaveAcesso extends React.Component {
       this.validarChave(currentValue);
     else if (length > 0) 
       this.setState({value: currentValue, 
-                     validationState: 'error', 
-                     help: 'A chave deve conter 44 dígitos',
+                     validationState: 'warning', 
+                     erros: ['A chave deve conter 44 dígitos'],
                      decomposicao: null});    
     else
       this.setState({value: currentValue, 
                      validationState: null,
-                     help: '',
-                     decomposicao: null});    
-
+                     erros: [],
+                     decomposicao: null});
   }
 
   handleChaveChange = (e) => {
@@ -82,7 +83,9 @@ class EntradaChaveAcesso extends React.Component {
                      value={this.state.value}
                      onChange={this.handleChaveChange}/>
         <FormControl.Feedback />
-        <HelpBlock>{this.state.help}</HelpBlock>
+        <HelpBlock>
+          <Lista itens={this.state.erros} />
+        </HelpBlock>
       </FormGroup>
       <div className="form-group col-md-12">
             <ButtonToolbar>
